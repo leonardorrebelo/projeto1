@@ -1,11 +1,11 @@
 <?php
-//capturo o objeto categoria que foi passado em $dados
 $categoria = $dados['categorias'][0];
 ?>
-<h1>Detalhes da categoria</h1>
-<form   action="index.php?acao=gravaalterar" method="post">
- <input type="hidden" name="id" value="<?= $categoria->getId() ?>">
-<p>nome: <input type="text" name="nome" value="<?= utf8_encode($categoria->getNome()) ?>"></p>
-<p>descrição:<input type="text" name="descricao"    value=" <?= utf8_encode($categoria->getDescricao()) ?>"></p>
- <input type="submit">
+<h1>Alterar categoria</h1>
+
+<form method="post" action="index.php?acao=gravaAlterar&id=<?= $categoria->getId() ?>">
+    nome <input type="text" name="nome" value="<?= $categoria->getNome() ?>">
+    descricao <input type="text" name="descricao" value="<?= $categoria->getDescricao() ?>">
+    <input type="submit">
 </form>
+

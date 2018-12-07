@@ -50,18 +50,17 @@ class CategoriaDAO extends DAO
             $stmt->bindParam(':descricao', $descricao, PDO::PARAM_STR, 255);
             $stmt->execute();
         }catch (PDOException $e){
-
             throw new PDOException($e);
         }
     }
 
-    public function update($dados, $id){
+    public function update($dados){
         $sql = "update Categoria set nome = :nome, descricao = :descricao where id = :id";
         try{
             $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':nome', $dados['nome'], PDO::PARAM_STR, 60);
             $stmt->bindParam(':descricao', $dados['descricao'], PDO::PARAM_STR, 255);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $dados['id'], PDO::PARAM_INT);
             $stmt->execute();
         }catch (PDOException $e){
 
@@ -70,19 +69,9 @@ class CategoriaDAO extends DAO
     }
 
     public function delete($id){
-
-        $sql1 = "delete from produto where id_categoria = :id";
+        $sql = "delete from categoria where id = :id";
         try{
-            $stmt = $this->conexao->prepare($sql1);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-        }catch (PDOException $e){
-            throw new PDOException($e);
-        }
-
-        $sql2 = "delete from categoria where id = :id";
-        try{
-            $stmt = $this->conexao->prepare($sql2);
+            $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
         }catch (PDOException $e){
