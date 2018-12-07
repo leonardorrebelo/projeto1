@@ -51,57 +51,41 @@ class CategoriaController
         View::carregar('view/template/rodape.html');
     }
 
-    public function inserir($categoria){
+    public function gravaInserir($categoria){
         $catdao = new CategoriaDAO();
-
-        try{
-            $nome = $categoria->getNome();
-            $descricao = $categoria->getDescricao();
-            $catdao->insert($nome, $descricao);
-            header("Location: index.php"); //redirecionamento
-            exit;
-        }catch (PDOException $e){
-            echo "Erro: ".$e->getMessage();
-        }
+        $catdao->insert($categoria);
+        header('location: index.php');
     }
-
+    public function gravaExcluir($id){
+        $catdao = new CategoriaDAO();
+        $catdao->delete($id);
+        header('location: index.php');
+    }
     public function alterar($id){
-        $catdao = new CategoriaDAO();
+            $this->dados = array();
+            $catdao = new CategoriaDAO();
 
-        try{
-            $categorias = $catdao->select($id);
-        }catch (PDOException $e){
-            echo "Erro: ".$e->getMessage();
+            try{
+                $categorias = $catdao->select($id);
+            }catch (PDOException $e){
+                echo "Erro: ".$e->getMessage();
+            }
+            $this->dados['categorias'] = $categorias;
+
+            View::carregar('view/template/cabecalho.html');
+            View::carregar('view/categoria/alterar.php', $this->dados);
+            View::carregar('view/template/rodape.html');
         }
-        $this->dados['categorias'] = $categorias;
 
-        View::carregar('view/template/cabecalho.html');
-        View::carregar('view/categoria/alterar.php', $this->dados);
-        View::carregar('view/template/rodape.html');
+    public function gravaalterar($categoria)
+    {
+        $catdao = new CategoriaDAO();
+        $catdao->update($categoria);
+        header('location: index.php');
+
     }
 
-    public function atualizar($dados, $id){
-        $catdao = new CategoriaDAO();
 
-        try{
-            $catdao->update($dados, $id);
-            header("Location: index.php"); //redirecionamento
-            exit;
-        }catch (PDOException $e){
-            echo "Erro: ".$e->getMessage();
-        }
-    }
 
-    public function excluir($id){
-        $catdao = new CategoriaDAO();
-
-        try{
-            $catdao->delete($id);
-            header("Location: index.php"); //redirecionamento
-            exit;
-        }catch (PDOException $e){
-            echo "Erro: ".$e->getMessage();
-        }
-    }
 
 }

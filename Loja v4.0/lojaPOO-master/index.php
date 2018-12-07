@@ -33,27 +33,33 @@ switch ($acao){
         $categoriaNova->setNome($_POST['nome']);
         $categoriaNova->setDescricao($_POST['descricao']);
         $cat = new CategoriaController();
-        $cat->inserir($categoriaNova);
+        $cat->gravaInserir($categoriaNova);
         exit;
+    case 'excluir':
+        //pegar dados do POST
+        $id = $_GET['id'];
+        $cat = new CategoriaController();
+        $cat->gravaExcluir($id);
+        exit;
+
     case 'alterar':
+        //pegar dados do POST
         $id = $_GET['id'];
         $cat = new CategoriaController();
         $cat->alterar($id);
         exit;
-    case 'gravaAlterar':
-        $id = $_GET['id'];
-        $dados = [
-            'nome' => $_POST['nome'],
-            'descricao' => $_POST['descricao']
-        ];
+    case 'gravaalterar':
+        $categoriaNova = new Categoria();
+        $categoriaNova->setNome($_POST['nome']);
+        $categoriaNova->setDescricao($_POST['descricao']);
+        $categoriaNova->setId($_POST['id']);
         $cat = new CategoriaController();
-        $cat->atualizar($dados, $id);
+        $cat->gravaalterar($categoriaNova);
         exit;
-    case 'excluir':
-        $cat = new CategoriaController();
-        $id = $_GET['id'];
-        $cat->excluir($id);
-        exit;
+
+
+
+
     default:
         echo "Ação inválida";
 

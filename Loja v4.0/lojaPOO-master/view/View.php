@@ -8,7 +8,7 @@
 
 class View
 {
-    public function carregar($pagina, $dados = null){
+    public static function carregar($pagina, $dados = null){
 
         include $pagina;
     }

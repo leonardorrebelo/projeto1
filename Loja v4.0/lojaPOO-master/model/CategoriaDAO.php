@@ -13,21 +13,6 @@ require_once "DAO.php";
 
 class CategoriaDAO extends DAO
 {
-    public function select($id){
-        $sql = "select * from Categoria where id = :id";
-        try{
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $categorias = $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'Categoria', ['nome', 'descricao', 'id']);
-
-            return $categorias;
-        }catch (PDOException $e){
-
-            throw new PDOException($e);
-        }
-    }
-
     public function selectAll(){
         $sql = "select * from categoria order by nome";
         try{
@@ -41,53 +26,67 @@ class CategoriaDAO extends DAO
             throw new PDOException($e);
         }
     }
-
-    public function insert($nome, $descricao){
-        $sql = "insert into Categoria (nome, descricao) values (:nome, :descricao)";
+    public function select($id){
+        $sql = "select * from categoria where id=:valorid order by nome";
         try{
             $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(':nome', $nome, PDO::PARAM_STR, 60);
-            $stmt->bindParam(':descricao', $descricao, PDO::PARAM_STR, 255);
+            $stmt->bindParam(':valorid', $id);
             $stmt->execute();
+            $categorias = $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'Categoria', ['nome', 'descricao', 'id']);
+
+            return $categorias;
         }catch (PDOException $e){
 
             throw new PDOException($e);
         }
     }
+    public function insert($categoria){
+       //RECEBE UM OBJETO DO TIPO CATEGORIA E 
+       //INSERE SEUS DADOS NO BANCO
+       $sql = "insert into categoria (nome, descricao) values (:nome, :descricao)";
+       $stmt = $this->conexao->prepare($sql);
+       $nome = $categoria->getNome();
+       $desc = $categoria->getDescricao();
+       $stmt->bindParam(':nome', $nome);
+       $stmt->bindParam(':descricao', $desc);
+       if ( $stmt->execute()){
+           return true;
+       }else{
+           return false;
+       }
 
-    public function update($dados, $id){
-        $sql = "update Categoria set nome = :nome, descricao = :descricao where id = :id";
-        try{
-            $stmt = $this->conexao->prepare($sql);
-            $stmt->bindParam(':nome', $dados['nome'], PDO::PARAM_STR, 60);
-            $stmt->bindParam(':descricao', $dados['descricao'], PDO::PARAM_STR, 255);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-        }catch (PDOException $e){
-
-            throw new PDOException($e);
-        }
     }
-
     public function delete($id){
-
-        $sql1 = "delete from produto where id_categoria = :id";
-        try{
-            $stmt = $this->conexao->prepare($sql1);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-        }catch (PDOException $e){
-            throw new PDOException($e);
+        //RECEBE UM OBJETO DO TIPO CATEGORIA E
+        //DELETA SEUS DADOS NO BANCO
+        $sql = " delete from categoria where id=:id";
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindParam(':id', $id);
+         if ( $stmt->execute()){
+            return true;
+        }else{
+            return false;
         }
 
-        $sql2 = "delete from categoria where id = :id";
-        try{
-            $stmt = $this->conexao->prepare($sql2);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-        }catch (PDOException $e){
-            throw new PDOException($e);
+    }
+    public function update($categoria)
+    {
+        //RECEBE UM OBJETO DO TIPO CATEGORIA E
+        //INSERE SEUS DADOS NO BANCO
+        $sql = "update categoria set nome=:nome,  descricao=:descricao where id=:id";
+        $stmt = $this->conexao->prepare($sql);
+        $nome = $categoria->getNome();
+        $desc = $categoria->getDescricao();
+        $id= &$categoria->getid();
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':descricao', $desc);
+        $stmt->bindParam(':id', $id);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
         }
+
 
     }
 }
