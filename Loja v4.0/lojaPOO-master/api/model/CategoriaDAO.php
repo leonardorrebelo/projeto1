@@ -69,14 +69,16 @@ class CategoriaDAO extends DAO
     }
 
     public function delete($id){
-        $sql = "delete from categoria where id = :id";
+        $sql = "delete from Categoria where id = :id";
         try{
             $stmt = $this->conexao->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
         }catch (PDOException $e){
             throw new PDOException($e);
+                  echo json_encode(['msg'=>$e->getMessage()]);
         }
+
 
     }
 }

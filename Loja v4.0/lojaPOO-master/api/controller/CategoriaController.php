@@ -59,7 +59,8 @@ class CategoriaController
             $catdao->delete($id);
             exit;
         }catch (PDOException $e){
-            echo "Erro: ".$e->getMessage();
+            throw $e;
+            
         }
     }
 }
